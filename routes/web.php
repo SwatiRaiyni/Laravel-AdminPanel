@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,18 +15,15 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::get('/', function () {
-    return view('welcome');
-});
-
+Route::redirect('/', '/login');
 
 Route::middleware('auth')->group(function () {
 
+    Route::get('/change-password',[HomeController ::class, 'showchangepasswordform'])->name('admin.showchangepassword');
+    Route::post('/change-password',[HomeController ::class, 'changepassword'])->name('admin.changepassword');
+    Route::get('/change-profile',[HomeController::class, 'changeProfile'])->name('admin.showprofileupdate');
+    Route::post('/change-profile',[HomeController::class, 'profileUpdate'])->name('admin.changeprofile');
     Route::get('dashboard',[DashboardController::class,'dashboard'])->name('admin.dashboard');
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 require __DIR__.'/auth.php';
